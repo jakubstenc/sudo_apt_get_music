@@ -1,0 +1,75 @@
+// 0. REGISTER THE SPEAK FUNCTION
+register('speak', (pat) => pat.onTrigger(v => {
+  if (v.s) { 
+    const msg = new SpeechSynthesisUtterance(v.s);
+    msg.rate = 1.5; // Make it fast to match the beat
+    msg.pitch = 0.5; // Low robot voice
+    window.speechSynthesis.speak(msg);
+  }
+}))
+// 1. SETUP SAMPLES
+samples({
+  loopA: 'https://raw.githubusercontent.com/jakubstenc/sudo_apt_get_music/main/commit_merge/commit_2.wav',
+  loopB: 'https://raw.githubusercontent.com/jakubstenc/sudo_apt_get_music/main/commit_merge/merge.wav',
+});
+
+// 2. VISUALS (Fixed)
+// If this still errors, run just this "initHydra()" line by itself first (Ctrl+Enter)
+initHydra() 
+osc(5, 0.1, 0.8)
+  .kaleid(4)            // MOVED UP: Apply geometry first 
+  .color(1, 0.3, 0.4)   // Then apply color
+  .rotate(0, 0.2)
+  .out()
+
+
+stack(
+  // 2. Drums: Driving 909 beat
+  // FIXED: Changed cp(~ 1 ~ 1) to [~ cp]*2
+  s("bd*4, [~ cp]*2, hh(5,8)*2, oh(3,16,4)")
+    .bank("RolandTR909")
+    .gain(0.4)
+    .room(0.2)
+    .degradeBy(0.2)
+
+  ,
+
+  // 3. Bassline
+  n("<c2*4 bb1*4 f2*4 eb2*4>")
+    .sound("sawtooth")
+    .fast(2)
+    .lpf(400)
+    .clip(0.8)
+    .distort(0.1)
+    .degradeBy(0.1)
+    .sometimes(x => x.add(7).clip(0.2).gain(0.5))
+
+  ,
+
+  // 4. Pad/Chord
+  note("<[c3 eb3 g3] [bb2 d3 f3] [f3 ab3 c4] [eb3 g3 bb3]>")
+    .sound("supersaw")
+    .slow(2)
+    .gain(0.3)
+    .room(0.6)
+    .lpf(sine.slow(4).range(300, 1500))
+    .sometimes(x => x.detune(rand.range(-1,1)).gain(0.1))
+
+  ,
+
+  // 5. User's loops (Reference the names defined at the top)
+    s('loopA')
+      .gain(0.6)
+      .slow(4)
+      .hpf(100)
+      .room(0.8)
+      .sometimes(x => x.rev()),
+      
+    s('loopB')
+      .gain(0.5)
+      .slow(8)
+      .hpf(200)
+      .room(0.9)
+      .sometimes(x => x.mask("1 0 1 0 0 0 0 0"))
+)
+.cpm(30) // 30 * 4 = 120 BPM - faster for techno

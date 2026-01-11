@@ -1,0 +1,18 @@
+
+// DEBUGGING SUITE
+// Run each block individually by highlighting it and pressing Ctrl+Enter
+// Or run the whole file to stack them.
+
+// TEST 1: Basic Synthesis (Sine Wave) - Does this make sound?
+// If silent: The internal synth engine might be failing.
+note("c3 a3 f3 g3").s("sine").gain(0.5).cpm(60)
+
+// TEST 2: Basic Drums (Default Samples) - Does this make sound?
+// If silent: Default samples usually download from the internet. Verify connection.
+// s("bd cp hh oh").cpm(60)
+
+// TEST 3: Your Loop (Custom Sample) - We know this works.
+// samples({
+//   testLoop: 'https://raw.githubusercontent.com/jakubstenc/sudo_apt_get_music/main/commit_merge/commit_2.wav'
+// })
+// s("testLoop").cpm(60)

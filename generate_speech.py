@@ -26,7 +26,7 @@ print("Generating speech audio... this may take a few seconds.")
 tts = gTTS(text=poem, lang='en', tld='co.uk', slow=False)
 
 # 3. Save the file directly into your commit_merge folder!
-output_path = "commit_merge/poem_speech.mp3"
+output_path = "commit_merge/poem_speech.wav"
 tts.save(output_path)
 
 print(f"Success! Your audio file is saved at: {output_path}")
